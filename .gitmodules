@@ -1,4 +1,4 @@
 [submodule "_ansible_configs"]
 	path = _ansible_configs
 	url = https://github.com/mshafer1/ansible-configs.git
-	shallow = bool
+	shallow = true
