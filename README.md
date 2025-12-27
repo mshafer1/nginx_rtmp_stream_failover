@@ -44,7 +44,6 @@ For configuring the system the repo is cloned on:
 all:
   hosts:
     multistream_server:
-      # TODO: if targeting localhost, uncomment the following line
       ansible_connection: local
       ansible_become_pass: ...
 
@@ -57,7 +56,7 @@ all:
         - scale: '-1:-1' # don't change scale
           url: rtmp://a.rtmp.youtube.com/live2/... # example. Replace "..." with your stream key
           interface_grep: 'eth*' # Make sure to use Ethernet port
-        - scale: '-1:720' # tell ffmpeg to downscale to 720p and calculate the width
+        - scale: '-2:720' # tell ffmpeg to downscale to 720p and calculate the width such that it's divisible by 2
           url: rtmp://b.rtmp.youtube.com/live2/.../?backup=1 # example. Replace "..." with your stream key
           interface_grep: 'wlan*' # Make sure to use Wi-Fi connection
   children:
