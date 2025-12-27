@@ -12,6 +12,31 @@ This repo is in pre-release stage
 
 ## How it works
 
+### High Level:
+[NGINX](https://nginx.org/en/) is installed with [the rtmp module](https://docs.nginx.com/nginx/admin-guide/dynamic-modules/rtmp/) (via, [nginx-rtmp-module](https://github.com/arut/nginx-rtmp-module)). NGINX is configured to allow pushing to it from certain IPs (configurable). A script runs on the system that pulls stream from nginx and sends it to the first "push". When that fails, the script starts pushing to the second "push" URL until it is able to get the first one to start and stay running again.
+
+### Flow diagram:
+
+
+```
++-----------+         +---------+        +----------------+             +----------------------+
+|           |         |         |        |                |             |                      |
+|   Input   +-------->|  NGINX  +---+--->|  ffmpeg (main) +------------>| Stream server (main) |
+|           |         |         |   |    |                |             |                      |
++-----------+         +---------+   |    +----------------+             +----------------------+
+                                    |          (xor)                                                 
+                                    |    +----------------+             +----------------------+
+                                    |    |                |             |                      |
+                                    +--->|  ffmpeg (alt)  +------------>| Stream server (alt)  |
+                                         |                |             |                      |
+                                         +----------------+             +----------------------+
+```
+
+### Notable implementation:
+- `push` is a collection of "please take the stream, scale it, and send it to this url". (see `inventory.yaml.template`).
+- Each ffmpeg instance is set to scale the image as specified in the corresponding push.
+- On start, the service assigns networking routes based on the "interface_grep" for each `push` (if provided). This means that the main and alt streams can be forced to go out different interfaces (e.g., wired vs wifi)
+
 ## Recommended OBS settings.
 
 When using OBS to stream through an rtmp relay to YouTube, some settings have to be set by hand:
