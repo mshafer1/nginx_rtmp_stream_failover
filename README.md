@@ -37,6 +37,35 @@ This repo is in pre-release stage
 - Each ffmpeg instance is set to scale the image as specified in the corresponding push.
 - On start, the service assigns networking routes based on the "interface_grep" for each `push` (if provided). This means that the main and alt streams can be forced to go out different interfaces (e.g., wired vs wifi)
 
+## Example inventory file
+
+For configuring the system the repo is cloned on:
+```yaml
+all:
+  hosts:
+    multistream_server:
+      # TODO: if targeting localhost, uncomment the following line
+      ansible_connection: local
+      ansible_become_pass: ...
+
+      multistream_fail_over__allowed_ips:
+        - '127.0.0.1'
+        - '192.168.1.2' # also allow this IP to push to the stream
+      multistream_pushes: [] # don't push from nginx
+      multistream_execs: [] # don't downscale from nginx
+      failover_pushes:
+        - scale: '-1:-1' # don't change scale
+          url: rtmp://a.rtmp.youtube.com/live2/... # example. Replace "..." with your stream key
+          interface_grep: 'eth*' # Make sure to use Ethernet port
+        - scale: '-1:720' # tell ffmpeg to downscale to 720p and calculate the width
+          url: rtmp://b.rtmp.youtube.com/live2/.../?backup=1 # example. Replace "..." with your stream key
+          interface_grep: 'wlan*' # Make sure to use Wi-Fi connection
+  children:
+    multistream_failover:
+      hosts:
+        multistream_server: # name must match line 3
+```
+
 ## Recommended OBS settings.
 
 When using OBS to stream through an rtmp relay to YouTube, some settings have to be set by hand:
