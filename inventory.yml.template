@@ -1,7 +1,16 @@
 all:
   hosts:
-    localhost:
-      multistream_allowed_ips: []
+    multistream_server:
+      # TODO: if targeting localhost, uncomment the following line
+      # ansible_connection: local
+
+      # TODO: if targeting via SSH, uncomment and fill in the following variables
+      # ansible_connection: ssh
+      # ansible_ssh_host: ...
+      # TODO: provide either password or ssh key -> see the docs (https://docs.ansible.com/projects/ansible/latest/collections/environment_variables.html#envvar-ANSIBLE_SSH_PASSWORD_MECHANISM)
+      multistream_fail_over__allowed_ips:
+        - '127.0.0.1'
+        # TODO: add other IPs that are allowed to push
       multistream_pushes: [] # don't push from nginx
       multistream_execs: [] # don't downscale from nginx
       failover_pushes:
@@ -9,5 +18,7 @@ all:
           url: rtmp://a.rtmp.youtube.com/live2/... # example. Replace "..." with your stream key
         - scale: '-1:720' # tell ffmpeg to downscale to 720p and calculate the width
           url: rtmp://b.rtmp.youtube.com/live2/.../?backup=1 # example. Replace "..." with your stream key
-  multistream:
-    localhost:
+  children:
+    multistream_failover:
+      hosts:
+        multistream_server:
