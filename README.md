@@ -6,6 +6,10 @@ Each "push" may specify unique URL to push to and a unique scale. If a scale is 
 
 **NOTE**: At this time, only one or two URLs are supported.
 
+# ⚠️ in progress ⚠️
+
+This repo is in pre-release stage
+
 ## How it works
 
 ## Recommended OBS settings.
