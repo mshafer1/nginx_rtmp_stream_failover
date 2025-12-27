@@ -1,0 +1,13 @@
+all:
+  hosts:
+    localhost:
+      multistream_allowed_ips: []
+      multistream_pushes: [] # don't push from nginx
+      multistream_execs: [] # don't downscale from nginx
+      failover_pushes:
+        - scale: -1
+          url: rtmp://a.rtmp.youtube.com/live2/... # example. Replace "..." with your stream key
+        - scale: '-1:720' # tell ffmpeg to downscale to 720p and calculate the width
+          url: rtmp://b.rtmp.youtube.com/live2/.../?backup=1 # example. Replace "..." with your stream key
+  multistream:
+    localhost:
