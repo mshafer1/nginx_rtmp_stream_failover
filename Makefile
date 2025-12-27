@@ -3,7 +3,7 @@ all: install
 .PHONY: all install
 
 install: ./inventory.yml objects/deps_installed
-	ansible-playbook -i ./inventory.yml ./_ansible_configs/playbooks/multistream.yml
+	ansible-playbook -i ./inventory.yml ./_ansible_configs/playbooks/multistream_failover.yml
 
 objects/deps_installed: objects/ install_requirements.sh
 	bash ./install_requirements.sh
