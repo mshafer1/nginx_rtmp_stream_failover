@@ -43,9 +43,12 @@ When using OBS to stream through an rtmp relay to YouTube, some settings have to
 
 - "Stream" -> "Server": `rtmp://.../live` (replacing "..." with the IP address of the destination)*
 - "Output" -> "Streaming" ->
-    "Bitrate" -> `6800 Kbps` (this is recommended by YouTube)
-    "Keyframe Interval" -> `4 s` (this is recommended by YouTube)
-    "CPU Usage Preset" -> `veryfast`
+ 
+    - "Bitrate" -> `6800 Kbps` (this is recommended by YouTube)
+
+    - "Keyframe Interval" -> `4 s` (this is recommended by YouTube)
+    
+    - "CPU Usage Preset" -> `veryfast`
 
 
 
